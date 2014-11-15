@@ -68,7 +68,7 @@ function _query (sConsumerKey, sConsumerSecret, sPath, oQueryParams, fnCallBack)
                 });
                 sPath += sQueryParams;
             }
-            console.log(sPath);
+            console.log("Requesting:", sPath);
             var oGetOptions = {
                 host: TWITTER_API_HOST,
                 path: sPath,
@@ -101,7 +101,7 @@ function _query (sConsumerKey, sConsumerSecret, sPath, oQueryParams, fnCallBack)
                 fnCallBack(sError);
             });
         } else {
-            console.error("Getting Bearer token failed with error", JSON.stringify(oError), "and keys", sConsumerKey, sConsumerSecret);
+            console.log("Getting Bearer token failed with error", JSON.stringify(oError), "and keys", sConsumerKey, sConsumerSecret);
         }
     });
 };
