@@ -1,9 +1,13 @@
 <div class="hero-unit">
-  <h1>'Allo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p>installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
+  <input type="text" ng-model="selectedUser" placeholder="Twitter handle"/>
+  <input type="number" ng-model="numberOfTweets" placeholder="Max # of tweets" />
+  <input type="button" value="Search" ng-disabled="selectedUser == ''" ng-click="fetchUserInfo()" />
+  
+  <p ng-show="selectedUserProfile">
+  	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}}</span>
+  </p>
+  <span ng-show="selectedUserTweets.length > 0">Tweets</span>
+  <p ng-repeat="tweet in selectedUserTweets">
+  	<span>{{tweet.text}}</span>
+  </p>
 </div>
