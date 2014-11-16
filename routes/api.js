@@ -26,9 +26,9 @@ router.get('/timeline/:twitterhandle', function (oHttpRequest, oHttpResponse, fn
 		config.twitter.TWITTER_CUSTOMER_KEY,
 		config.twitter.TWITTER_CUSTOMER_SECRET,
 		oHttpRequest.params.twitterhandle,
-		oHttpRequest.query.count || 10,
-		oHttpRequest.query.start_date,
-		oHttpRequest.query.end_date,
+		parseInt(oHttpRequest.query.count) || 10,
+		parseInt(oHttpRequest.query.start_date) || 0,
+		parseInt(oHttpRequest.query.end_date) || 0,
 		function (sErr, oData) {
 			if (sErr)
 				oHttpResponse.send(sErr);
