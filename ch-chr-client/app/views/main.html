@@ -4,10 +4,10 @@
   <input type="button" value="Search" ng-disabled="selectedUser == ''" ng-click="fetchUserInfo()" />
   
   <p ng-show="selectedUserProfile">
-  	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}}</span>
+  	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}} {{selectedUserProfile.created_at}}</span>
   </p>
   <span ng-show="selectedUserTweets.length > 0">Tweets</span>
   <p ng-repeat="tweet in selectedUserTweets">
-  	<span>{{tweet.text}}</span>
+  	<span>{{tweet.text}} {{tweet.created_at}}</span>
   </p>
 </div>
