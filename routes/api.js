@@ -23,10 +23,12 @@ router.get('/profile/:twitterhandle', function(oHttpRequest, oHttpResponse, fnNe
 router.get('/timeline/:twitterhandle', function (oHttpRequest, oHttpResponse, fnNext) {
 	oHttpResponse.setHeader('Content-Type', 'application/json');
 	chtwitter.getTimeline(
-		config.twitter.TWITTER_CUSTOMER_KEYs,
+		config.twitter.TWITTER_CUSTOMER_KEY,
 		config.twitter.TWITTER_CUSTOMER_SECRET,
 		oHttpRequest.params.twitterhandle,
-		oHttpRequest.query.count || 300,
+		oHttpRequest.query.count || 10,
+		oHttpRequest.query.start_date,
+		oHttpRequest.query.end_date,
 		function (sErr, oData) {
 			if (sErr)
 				oHttpResponse.send(sErr);

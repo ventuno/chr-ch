@@ -112,7 +112,7 @@ function _query (sConsumerKey, sConsumerSecret, sPath, oQueryParams, fnCallBack)
     });
 };
 
-function _getTimeline (sConsumerKey, sConsumerSecret, sScreenName, iCount, iMaxId, fnCallBack, fnInternalCallBack, oTimelineEventEmitter) {
+function _getTimeline (sConsumerKey, sConsumerSecret, sScreenName, iCount, iStartDate, iEndDate, iMaxId, fnCallBack, fnInternalCallBack, oTimelineEventEmitter) {
     function fnInternalCallBack (sErr, oData) {
         if (!sErr) {
             if (iCount > oData.length) {
@@ -120,23 +120,43 @@ function _getTimeline (sConsumerKey, sConsumerSecret, sScreenName, iCount, iMaxI
                 var iMaxId = oData[oData.length-1].id;
                 console.log("Requesting additional timeline tweets", iCount, oData.length, iMaxId);
                 oTimelineEventEmitter.emit('timelineData', oData);
-                return _getTimeline(sConsumerKey, sConsumerSecret, sScreenName, iLeft, iMaxId, null, fnInternalCallBack, oTimelineEventEmitter);
+                return _getTimeline(sConsumerKey, sConsumerSecret, sScreenName, iLeft, iStartDate, iEndDate, iMaxId, null, fnInternalCallBack, oTimelineEventEmitter);
             }
-            //fnCallBack(null, oData);
-            console.log("?>>>>>>>>>>>>>>>>>>>>>No more");
+            if (iStartDate || iEndDate) {
+                var oFilteredData = [];
+                iEndDate = iEndDate || new Date().getTime(); //if we don't have an end date, 
+                for (var i = 0; i < oData.length; i++) {
+                    var iTweetDate = new Date(oData[i].created_at).getTime();
+                    if (iTweetDate >= iStartDate && iTweetDate <= iEndDate && oFilteredData.length < iCount) {
+                        oFilteredData.push(oData[i]);
+                        if (i == oData.length - 1) { //if I reached the end and I'm still pushing data, maybe there's more data
+                            var iLeft = iCount - oFilteredData.length;
+                            var iMaxId = oFilteredData[oFilteredData.length-1].id;
+                            oTimelineEventEmitter.emit('timelineData', oFilteredData);
+                            return _getTimeline(sConsumerKey, sConsumerSecret, sScreenName, iLeft, iStartDate, iEndDate, iMaxId, null, fnInternalCallBack, oTimelineEventEmitter);
+                        }
+                    }
+                    if (oFilteredData.length >= iCount)
+                        break;
+                }
+                oData = oFilteredData;
+            }
             return oTimelineEventEmitter.emit('timelineEnd', oData);
         } else {
-            //fnCallBack(sErr); //fail
-            return oTimelineEventEmitter.emit('timelineError', sErr);
+            return oTimelineEventEmitter.emit('timelineError', sErr); //fail
         }
     };
-
     var oParams = {
         count: iCount,
         screen_name: sScreenName,
     };
     if (iMaxId)
         oParams.max_id = iMaxId;
+    //if we have some date filters, let's just get as many tweets as possible to minimize
+    //the amount of backend calls, we then filter data locally anyways
+    if (iStartDate || iEndDate) {
+        oParams.count = TWITTER_API_TIMELINE_MAX_COUNT;
+    }
 
     console.log("Requesting TIMELINE", iCount);
     _query(sConsumerKey, sConsumerSecret, TWITTER_API_TIMELINE_URL, oParams, fnInternalCallBack);
@@ -151,6 +171,7 @@ var TWITTER_API_HOST = 'api.twitter.com';
 var TWITTER_API_OAUTH2_PATH = '/oauth2/token';
 var TWITTER_API_BASE_URL = '/1.1';
 var TWITTER_API_TIMELINE_URL = TWITTER_API_BASE_URL + '/statuses/user_timeline.json';
+var TWITTER_API_TIMELINE_MAX_COUNT = 200;
 
 module.exports = {
     getBearerToken: function (sConsumerKey, sConsumerSecret, fnCallBack) {
@@ -159,9 +180,10 @@ module.exports = {
     query: function (sConsumerKey, sConsumerSecret, sPath, oQueryParams, fnCallBack) {
         _query(sConsumerKey, sConsumerSecret, sPath, oQueryParams, fnCallBack);
     },
-    getTimeline: function (sConsumerKey, sConsumerSecret, sScreenName, iCount, fnCallBack) {
+    //iStartDate and iEndDate are seconds since EPOCH
+    getTimeline: function (sConsumerKey, sConsumerSecret, sScreenName, iCount, iStartDate, iEndDate, fnCallBack) {
         var oTotalData = [];
-        _getTimeline(sConsumerKey, sConsumerSecret, sScreenName, iCount, null, function (sErr, oTimelineEventEmitter) {
+        _getTimeline(sConsumerKey, sConsumerSecret, sScreenName, iCount, iStartDate, iEndDate, null, function (sErr, oTimelineEventEmitter) {
             oTimelineEventEmitter.on('timelineData', function (oData) {
                 oTotalData = oTotalData.concat(oData);
             });
