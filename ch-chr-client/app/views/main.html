@@ -1,6 +1,8 @@
 <div class="hero-unit">
   <input type="text" ng-model="selectedUser" placeholder="Twitter handle"/>
   <input type="number" ng-model="numberOfTweets" placeholder="Max # of tweets" />
+  <input type="date" ng-model="startDateFilter" placeholder="Start date" />
+  <input type="date" ng-model="endDateFilter" placeholder="End date" />
   <input type="button" value="Search" ng-disabled="selectedUser == ''" ng-click="fetchUserInfo()" />
   
   <p ng-show="selectedUserProfile">
