@@ -149,6 +149,7 @@ function _getTimeline (sConsumerKey, sConsumerSecret, sScreenName, iCount, iStar
     var oParams = {
         count: iCount,
         screen_name: sScreenName,
+        trim_user: true //exclude user profile
     };
     if (iMaxId)
         oParams.max_id = iMaxId;
