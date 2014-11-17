@@ -147,9 +147,9 @@ function _getTimeline (sConsumerKey, sConsumerSecret, sScreenName, iCount, iStar
         }
     };
     var oParams = {
-        count: iCount,
+        count: iCount || TWITTER_API_TIMELINE_MAX_COUNT,
         screen_name: sScreenName,
-        trim_user: true //exclude user profile
+        //trim_user: true //exclude user profile
     };
     if (iMaxId)
         oParams.max_id = iMaxId;
