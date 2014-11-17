@@ -75,7 +75,7 @@ router.get('/timeline/:twitterhandle', function (oHttpRequest, oHttpResponse, fn
 	oHttpResponse.setHeader('Content-Type', 'application/json');
 
 	var bWithPicturesOnly = oHttpRequest.query.with_pictures_only == "true";
-	var iMinRetweets = parseInt(oHttpRequest.query.min_retweets) || 0;
+	var iMinRetweets = parseInt(oHttpRequest.query.retweet_filter) || 0;
 
 	chtwitter.getTimeline(
 		config.twitter.TWITTER_CUSTOMER_KEY,
@@ -93,8 +93,8 @@ router.get('/timeline/:twitterhandle', function (oHttpRequest, oHttpResponse, fn
 					var oTweet = oData[i];
 					//TODO, think about optimizing this and put it in the main api call (e.g.: we shouldn't loop through tweets too many times)
 					if (bWithPicturesOnly || iMinRetweets > 0) {
-						var bToFilterOutPics = true;
-						var bToFilterOutRetweets = true;
+						var bToFilterOutPics = bWithPicturesOnly;
+						var bToFilterOutRetweets = iMinRetweets > 0;
 						//at this point, if the following if is true, we should be pretty sure that the tweet contains a picture
 						//in the future, if twitter enables sending videos and other media types this code could fail
 						//for now, I'd avoid looping through each media to verify that it's type="photo"
