@@ -4,7 +4,8 @@ angular.module('chChrClientApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'twitterServices'
+  'twitterServices',
+  'twitterDirectives'
 ])
   .config(function ($routeProvider) {
     $routeProvider

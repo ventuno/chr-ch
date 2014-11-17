@@ -14,8 +14,9 @@
     <span style="display: inline;">{{reputationScore.reputation_score}}pts</span>
   	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}} {{selectedUserProfile.created_at}}</span>
   </p>
-  <span ng-show="selectedUserTweets.length > 0">Tweets</span>
+  <span ng-show="selectedUserTweets.length > 0">Tweets ({{selectedUserTweets.length}})</span>
   <p ng-repeat="tweet in selectedUserTweets">
-  	<span>{{tweet.text}} {{tweet.created_at}}</span>
+  	<!--span>{{tweet.text}} {{tweet.created_at}}</span-->
+    <tweet text="tweet.text" date="tweet.created_at" picture="tweet.entities.media[0].media_url" retweets="tweet.retweet_count"></tweet>
   </p>
 </div>

@@ -1,0 +1,35 @@
+<style>
+.tweet {
+	margin: 0 auto;
+	width: 600px;
+	border-bottom: 1px solid #bbb;
+	margin-bottom: 20px;
+}
+.tweetText {
+	margin: 0;
+}
+.tweetDate,
+.tweetPicLink,
+.tweetRetweetCount {
+	font-size: 14px;
+}
+.tweetPicLink {
+	display: block;
+	text-align: center;
+}
+.tweetRetweetCount {
+	display: inline-block;
+	width: 50%;	
+}
+.tweetRetweetCount {
+	text-align: right;
+}
+</style>
+<div class="tweet">
+	<p class="tweetText">{{text}}</p>
+	<a href="{{picture}}" target="_blank" ng-show="picture" class="tweetPicLink">See pic</a>
+	<div>
+		<span class="tweetDate">{{date}}</span>
+		<span class="tweetRetweetCount">Retweeted: {{retweets}} times.</span>
+	</div>
+</div>
