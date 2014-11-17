@@ -11,6 +11,7 @@
   <input type="button" value="Search" ng-disabled="selectedUser == ''" ng-click="fetchUserInfo()" />
   
   <p ng-show="selectedUserProfile">
+    <span style="display: inline;">{{reputationScore.reputation_score}}pts</span>
   	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}} {{selectedUserProfile.created_at}}</span>
   </p>
   <span ng-show="selectedUserTweets.length > 0">Tweets</span>

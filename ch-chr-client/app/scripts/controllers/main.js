@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('chChrClientApp')
-  .controller('MainCtrl', ['$scope', 'TwitterProfile', 'TwitterTimeline', function ($scope, TwitterProfile, TwitterTimeline) {
+  .controller('MainCtrl', ['$scope', 'TwitterProfile', 'TwitterTimeline', 'TwitterReputationScore', function ($scope, TwitterProfile, TwitterTimeline, TwitterReputationScore) {
   	$scope.selectedUser = "";
+    $scope.reputationScore = "";
   	$scope.numberOfTweets;
   	$scope.startDateFilter = null;
   	$scope.endDateFilter = null;
@@ -13,6 +14,10 @@ angular.module('chChrClientApp')
   		$scope.selectedUserProfile = TwitterProfile.get({
   			twitterhandle: $scope.selectedUser
   		});
+
+      $scope.reputationScore = TwitterReputationScore.get({
+        twitterhandle: $scope.selectedUser
+      });
 
   		$scope.selectedUserTweets = TwitterTimeline.get({
   			twitterhandle: $scope.selectedUser,

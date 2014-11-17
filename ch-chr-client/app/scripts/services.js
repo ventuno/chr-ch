@@ -11,3 +11,8 @@ twitterServices.factory('TwitterTimeline', ['$resource',
     		get: {method:'GET', isArray: true}
     	});
  }]);
+
+twitterServices.factory('TwitterReputationScore', ['$resource',
+	function($resource){
+    	return $resource('/api/twitter/reputation_score/:twitterhandle', {}, {});
+ }]);
