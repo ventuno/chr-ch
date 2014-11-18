@@ -17,6 +17,7 @@
 	display: block;
 	text-align: center;
 }
+.tweetDate,
 .tweetRetweetCount {
 	display: inline-block;
 	width: 50%;	
@@ -29,7 +30,6 @@
 	<p class="tweetText">{{text}}</p>
 	<a href="{{picture}}" target="_blank" ng-show="picture" class="tweetPicLink">See pic</a>
 	<div>
-		<span class="tweetDate">{{date}}</span>
-		<span class="tweetRetweetCount">Retweeted: {{retweets}} times.</span>
+		<span class="tweetDate">{{date}}</span><span class="tweetRetweetCount">Retweeted: {{retweets}} times.</span>
 	</div>
 </div>

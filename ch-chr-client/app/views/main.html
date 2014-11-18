@@ -9,11 +9,17 @@
   <input id="filterPictures" type="checkbox" ng-model="picturesFilter" />
   </span>
   <input type="button" value="Search" ng-disabled="selectedUser == ''" ng-click="fetchUserInfo()" />
-  
+
+  <p ng-show="reputationScore.reputation_score > 0">
+    <span>Reputation score: {{reputationScore.reputation_score | number:2}}pts</span>
+  </p>
   <p ng-show="selectedUserProfile">
-    <span style="display: inline;">{{reputationScore.reputation_score}}pts</span>
   	<span>{{selectedUserProfile.name}} {{selectedUserProfile.location}} {{selectedUserProfile.created_at}}</span>
   </p>
+  <p ng-show="selectedUserProfile.errors">
+    <span>Could not load {{selectedUser}}&#39;s profile.</span>
+  </p>
+  <span ng-show="selectedUserTweets.length == 0">No tweets for this user.</span>
   <span ng-show="selectedUserTweets.length > 0">Tweets ({{selectedUserTweets.length}})</span>
   <p ng-repeat="tweet in selectedUserTweets">
   	<!--span>{{tweet.text}} {{tweet.created_at}}</span-->
