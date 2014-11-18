@@ -5,6 +5,11 @@ var chtwitter = require('../local_modules/ch-twitter');
 var chtsentanalysis = require('../local_modules/ch-sent-analysis');
 var config = require('../config');
 
+function _sendErrorMessage (sErr, oHttpResponse) {
+	oHttpResponse.statusCode = 400; ///for now, send a generic 400, as soon as we know all twitter's error codes we can use proper error status codes (404, 500, 401, ...)
+	oHttpResponse.send(sErr); //fail
+};
+
 function _computeReputationScore (oUserProfile, aTweets) {
 	var iNegativeTweets = 0;
 	var iPositiveTweets = 0;
@@ -67,7 +72,10 @@ router.get('/profile/:twitterhandle', function(oHttpRequest, oHttpResponse, fnNe
 	_getProfile(
 		oHttpRequest.params.twitterhandle,
 		function (sErr, oData) {
-			oHttpResponse.send(JSON.stringify(oData));
+			if (sErr)
+				_sendErrorMessage(sErr, oHttpResponse);
+			else 
+				oHttpResponse.send(JSON.stringify(oData));
 		}
 	);
 });
@@ -87,7 +95,7 @@ router.get('/timeline/:twitterhandle', function (oHttpRequest, oHttpResponse, fn
 		parseInt(oHttpRequest.query.end_date) || 0,
 		function (sErr, oData) {
 			if (sErr)
-				oHttpResponse.send(sErr);
+				_sendErrorMessage(sErr, oHttpResponse);
 			else {
 				var oFilteredData = [];
 				for (var i = 0; i < oData.length; i++) {
@@ -136,8 +144,8 @@ router.get('/reputation_score/:twitterhandle', function(oHttpRequest, oHttpRespo
 		0,
 		0,
 		function (sErr, oData) {
-			if (sErr) 
-				oHttpResponse.send(sErr);
+			if (sErr)
+				_sendErrorMessage(sErr, oHttpResponse);
 			else {
 				var iReputationScore = -1;
 				if (oData.length > 0) {
