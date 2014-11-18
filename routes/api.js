@@ -41,10 +41,11 @@ function _computeReputationScore (oUserProfile, aTweets) {
 	//we adjust the score using an influence factor, that is the ratio between the number of followers the current user has
 	//and the average number of followers per twitter user.
 	//this rewards users with many positive tweets and penalizes users wtih many negative reviews
-	if (iPositiveTweets > iNegativeTweets)
+	//commenting it out for now, as it is more complex to cap the reputation score to a "small" value
+	/*if (iPositiveTweets > iNegativeTweets)
 		iScore = iScore*fInfluenceFactor;
 	else
-		iScore = iScore/fInfluenceFactor;
+		iScore = iScore/fInfluenceFactor;*/
 	return iScore;
 };
 
