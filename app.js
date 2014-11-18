@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
 var api = require('./routes/api');
+var config = require('./config');
 
 var app = express();
 
@@ -25,7 +26,7 @@ app.use(cookieParser());
 
 //app.use('/', routes);
 //app.use('/users', users);
-app.use('/api/twitter', api);
+app.use(config.twitter.API_BASE_URL, api);
 
 // catch 404 and forward to error handler
 /*app.use(function(req, res, next) {
